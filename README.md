@@ -3,15 +3,19 @@ VREP simulation repo
 
 ## Build
 
-   export VREP_HOME=/home/user/vrep/...
+```bash
+export VREP_HOME=/home/user/vrep/...
 
-   mkdir build
-   cd build
-   cmake ..
-   make
+mkdir build
+cd build
+cmake ..
+make
+```
 
 ## Run
    
-   cd build
-   ./robot PORT LeftMotor RoghtMotor
+```bash
+cd build
+./robot PORT LeftMotor RoghtMotor
+```
 
