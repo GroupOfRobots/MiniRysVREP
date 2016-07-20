@@ -28,8 +28,8 @@ extern "C" {
 
 int MoveandRotate(float LinVel, float AngVel, float radius, float lengthWheelAxis, int clientID, int leftMotorHandle, int rightMotorHandle)
 {
-       float leftMotorAngVel=(LinVel-AngVel*(lengthWheelAxis/2))/radius;
-       float rightMotorAngVel=(LinVel+AngVel*(lengthWheelAxis/2))/radius;
+       float leftMotorAngVel=-(LinVel-AngVel*(lengthWheelAxis/2))/radius;
+       float rightMotorAngVel=-(LinVel+AngVel*(lengthWheelAxis/2))/radius;
        simxSetJointTargetVelocity(clientID,leftMotorHandle,leftMotorAngVel,simx_opmode_oneshot);			
        simxSetJointTargetVelocity(clientID,rightMotorHandle,rightMotorAngVel,simx_opmode_oneshot);
 }
@@ -55,6 +55,8 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 		simxGetObjectOrientation(clientID, cuboidHandle, -1, ObjectOrientation, simx_opmode_streaming);
 		simxGetObjectPosition(clientID,cuboidHandle,-1,ObjectPosition,simx_opmode_oneshot_wait);
 
+		ObjectOrientation[2] += 1.57;
+
 		GoalOrientation=atan2((GoalPosition[1]-ObjectPosition[1]),(GoalPosition[0]-ObjectPosition[0]));
 		OrientationError=ObjectOrientation[2]-GoalOrientation;
 		
@@ -62,10 +64,11 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 		MoveandRotate(LinVel, AngVel, radius, axis, clientID, leftMotorHandle, rightMotorHandle);
 		printf("Distance: %f Robot: %f Goal: %f Error: %f\n", distance, ObjectOrientation[2], GoalOrientation, OrientationError); 
 
-		distance=sqrt(pow(ObjectPosition[0]-GoalPosition[0],2)+pow(ObjectPosition[1]-GoalPosition[1],2)+pow(ObjectPosition[2]-GoalPosition[2],2));
+		distance=sqrt(pow(ObjectPosition[0]-GoalPosition[0],2)+pow(ObjectPosition[1]-GoalPosition[1],2));
 		
 	}
-	simxStopSimulation(clientID, simx_opmode_oneshot);
+	MoveandRotate(0, 0, radius, axis, clientID, leftMotorHandle, rightMotorHandle);
+//	simxStopSimulation(clientID, simx_opmode_oneshot);
 }
 
 
@@ -101,9 +104,9 @@ int main(int argc,char* argv[])
 		float ObjectPosition[3];
 		float GoalPosition[3];
 		float ObjectOrientation[3];
-		float minDistance=0.2;
+		float minDistance=0.3;
 
-		while (simxGetConnectionId(clientID)!=-1)
+		if (simxGetConnectionId(clientID)!=-1)
 		{  
 			simxUChar sensorTrigger=0;
 			//motorSpeeds[0]=-3.1415f*0.5f;
@@ -126,6 +129,8 @@ int main(int argc,char* argv[])
 
 			simxGetObjectPosition(clientID,goalHandle,-1,GoalPosition,simx_opmode_oneshot_wait);
 			MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
+			simxSetJointTargetVelocity(clientID,leftMotorHandle,0,simx_opmode_blocking);			
+      			simxSetJointTargetVelocity(clientID,rightMotorHandle,0,simx_opmode_blocking);
 			extApi_sleepMs(5);
 
 		}
