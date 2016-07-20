@@ -20,6 +20,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 extern "C" {
     #include "extApi.h"
@@ -33,6 +34,40 @@ int MoveandRotate(float LinVel, float AngVel, float radius, float lengthWheelAxi
        simxSetJointTargetVelocity(clientID,rightMotorHandle,rightMotorAngVel,simx_opmode_oneshot);
 }
 
+int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMotorHandle, int rightMotorHandle, int cuboidHandle)
+{
+	float radius=0.25;
+	float axis=0.5;
+	float P=0.3;
+	float LinVel=0.2;
+	float AngVel;
+
+	float ObjectPosition[3];
+	float ObjectOrientation[3]; //rotation about Z --> ObjectOrientation[2]
+	float GoalOrientation; //angle between 0x and line between ObjectPosition and Goal Position
+	float OrientationError;
+
+	simxGetObjectPosition(clientID,cuboidHandle,-1,ObjectPosition,simx_opmode_oneshot_wait);
+	
+	float distance=sqrt(pow(ObjectPosition[0]-GoalPosition[0],2)+pow(ObjectPosition[1]-GoalPosition[1],2)+pow(ObjectPosition[2]-GoalPosition[2],2));
+	while (distance>minDistance)
+	{
+		simxGetObjectOrientation(clientID, cuboidHandle, -1, ObjectOrientation, simx_opmode_streaming);
+		simxGetObjectPosition(clientID,cuboidHandle,-1,ObjectPosition,simx_opmode_oneshot_wait);
+
+		GoalOrientation=atan2((GoalPosition[1]-ObjectPosition[1]),(GoalPosition[0]-ObjectPosition[0]));
+		OrientationError=ObjectOrientation[2]-GoalOrientation;
+		
+		AngVel=P*OrientationError;
+		MoveandRotate(LinVel, AngVel, radius, axis, clientID, leftMotorHandle, rightMotorHandle);
+		printf("Distance: %f Robot: %f Goal: %f Error: %f\n", distance, ObjectOrientation[2], GoalOrientation, OrientationError); 
+
+		distance=sqrt(pow(ObjectPosition[0]-GoalPosition[0],2)+pow(ObjectPosition[1]-GoalPosition[1],2)+pow(ObjectPosition[2]-GoalPosition[2],2));
+		
+	}
+	simxStopSimulation(clientID, simx_opmode_oneshot);
+}
+
 
 
 int main(int argc,char* argv[])
@@ -40,14 +75,16 @@ int main(int argc,char* argv[])
 	int portNb=0;
 	int leftMotorHandle;
 	int rightMotorHandle;
-	int sensorHandle;
+	int cuboidHandle;
+	int goalHandle;
 
-	if (argc>=5)
+	if (argc>=6)
 	{
 		portNb=atoi(argv[1]);
 		leftMotorHandle=atoi(argv[2]);
 		rightMotorHandle=atoi(argv[3]);
-		sensorHandle=atoi(argv[4]);
+		cuboidHandle=atoi(argv[4]);
+		goalHandle=atoi(argv[5]);
 	}
 	else
 	{
@@ -62,24 +99,35 @@ int main(int argc,char* argv[])
 		float motorSpeeds[2];
 		float leftMotorAngle;
 		float ObjectPosition[3];
-		
+		float GoalPosition[3];
+		float ObjectOrientation[3];
+		float minDistance=0.2;
 
 		while (simxGetConnectionId(clientID)!=-1)
 		{  
 			simxUChar sensorTrigger=0;
-			motorSpeeds[0]=-3.1415f*0.5f;
-			motorSpeeds[1]=-3.1415f*0.25f;
+			//motorSpeeds[0]=-3.1415f*0.5f;
+			//motorSpeeds[1]=-3.1415f*0.25f;
 			simxGetObjectHandle(clientID, argv[2], &leftMotorHandle, simx_opmode_blocking);
                         simxGetObjectHandle(clientID, argv[3], &rightMotorHandle, simx_opmode_blocking);
+			simxGetObjectHandle(clientID, argv[4], &cuboidHandle, simx_opmode_blocking);
+			simxGetObjectHandle(clientID, argv[5], &goalHandle, simx_opmode_blocking);
 			//printf("LMH: %d\n", leftMotorHandle);
-			simxGetJointPosition(clientID,leftMotorHandle,&leftMotorAngle,simx_opmode_streaming);
+			//simxGetJointPosition(clientID,leftMotorHandle,&leftMotorAngle,simx_opmode_streaming);
 			//printf("%f\n", leftMotorAngle);
-			simxGetObjectPosition(clientID,leftMotorHandle,-1,ObjectPosition,simx_opmode_oneshot_wait);
-			printf("%f %f %f\n", ObjectPosition[0], ObjectPosition[1], ObjectPosition[2]);
+			//simxGetObjectPosition(clientID,cuboidHandle,-1,ObjectPosition,simx_opmode_oneshot_wait);
+			//printf("%f %f %f\n", ObjectPosition[0], ObjectPosition[1], ObjectPosition[2]);
 			//simxSetJointTargetVelocity(clientID,leftMotorHandle,motorSpeeds[0],simx_opmode_oneshot);			
 			//simxSetJointTargetVelocity(clientID,rightMotorHandle,motorSpeeds[1],simx_opmode_oneshot);	
-                        MoveandRotate(0.1,1.,0.25,0.5,clientID,leftMotorHandle,rightMotorHandle);	
+                        //MoveandRotate(0.1,-0.1,0.25,0.5,clientID,leftMotorHandle,rightMotorHandle);
+			
+			//simxGetObjectOrientation(clientID, cuboidHandle, -1, ObjectOrientation, simx_opmode_streaming);
+			//printf("Orientation: %f %f %f\n", ObjectOrientation[0]*180/3.14, ObjectOrientation[1]*180/3.14, ObjectOrientation[2]*180/3.14);	
+
+			simxGetObjectPosition(clientID,goalHandle,-1,GoalPosition,simx_opmode_oneshot_wait);
+			MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
 			extApi_sleepMs(5);
+
 		}
 		printf("Fin!\n");
 		simxFinish(clientID);
