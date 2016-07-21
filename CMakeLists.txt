@@ -5,16 +5,23 @@ cmake_minimum_required(VERSION 2.8)
 # eg. export VREP_HOME=/home/user/vrep/...
 # in terminal or in .bashrc file
 if(NOT DEFINED ENV{VREP_HOME})
-    message(FATAL_ERROR "Define VREP_HOME environment variable!")
+    
+    message(WARNING "Define VREP_HOME environment variable! Only tests will be built")
+
+else()
+
+    include_directories(remoteApi)
+    include_directories($ENV{VREP_HOME}/programming/include)
+
+    add_definitions(-DNON_MATLAB_PARSING -DMAX_EXT_API_CONNECTIONS=255 -D__linux)
+
+    add_executable(robot main.cpp remoteApi/extApi.c remoteApi/extApiPlatform.c)
+    target_link_libraries(robot pthread)
+    
 endif()
 
-include_directories(remoteApi)
-include_directories($ENV{VREP_HOME}/programming/include)
-
-add_definitions(-DNON_MATLAB_PARSING -DMAX_EXT_API_CONNECTIONS=255 -D__linux)
-
-add_executable(robot main.cpp remoteApi/extApi.c remoteApi/extApiPlatform.c)
-target_link_libraries(robot pthread)
+SET(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -fprofile-arcs -ftest-coverage")
+SET(CMAKE_C_FLAGS_DEBUG "-g -O0 -fprofile-arcs -ftest-coverage")
 
 #
 # Testing
@@ -28,3 +35,12 @@ target_link_libraries (orientation_test ${Boost_LIBRARIES})
 
 enable_testing()
 add_test (NAME orientation_test COMMAND orientation_test)
+
+#
+# Code coverage
+#
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR})
+if(CMAKE_COMPILER_IS_GNUCXX)
+    include(CodeCoverage)
+    setup_target_for_coverage(${PROJECT_NAME}_coverage orientation_test coverage)
+endif()
