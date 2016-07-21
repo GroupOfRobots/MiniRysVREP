@@ -1,7 +1,7 @@
 #define BOOST_TEST_MODULE sqr_test
 #include <boost/test/unit_test.hpp>
 
-#define DEBUG
+//#define DEBUG
 #include "robot.h"
 
 BOOST_AUTO_TEST_CASE(Test1)
