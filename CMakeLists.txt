@@ -11,7 +11,20 @@ endif()
 include_directories(remoteApi)
 include_directories($ENV{VREP_HOME}/programming/include)
 
-add_definitions(-DNON_MATLAB_PARSING -DMAX_EXT_API_CONNECTIONS=255 -D__linux)
+add_definitions(-DNON_MATLAB_PARSING -DMAX_EXT_API_CONNECTIONS=255 -D__linux -std=c++11)
 
 add_executable(robot main.cpp remoteApi/extApi.c remoteApi/extApiPlatform.c)
 target_link_libraries(robot pthread)
+
+#
+# Testing
+#
+find_package (Boost COMPONENTS system filesystem unit_test_framework REQUIRED)
+include_directories (${Boost_INCLUDE_DIRS})
+add_definitions (-DBOOST_TEST_DYN_LINK)
+
+add_executable (orientation_test orientation_test.cpp)
+target_link_libraries (orientation_test ${Boost_LIBRARIES})
+
+enable_testing()
+add_test (NAME orientation_test COMMAND orientation_test)
