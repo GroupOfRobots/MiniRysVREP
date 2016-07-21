@@ -22,14 +22,16 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include "robot.h"
+
 extern "C" {
     #include "extApi.h"
 }
 
 int MoveandRotate(float LinVel, float AngVel, float radius, float lengthWheelAxis, int clientID, int leftMotorHandle, int rightMotorHandle)
 {
-       float leftMotorAngVel=-(LinVel-AngVel*(lengthWheelAxis/2))/radius;
-       float rightMotorAngVel=-(LinVel+AngVel*(lengthWheelAxis/2))/radius;
+       float leftMotorAngVel=(LinVel-AngVel*(lengthWheelAxis/2))/radius;
+       float rightMotorAngVel=(LinVel+AngVel*(lengthWheelAxis/2))/radius;
        simxSetJointTargetVelocity(clientID,leftMotorHandle,leftMotorAngVel,simx_opmode_oneshot);			
        simxSetJointTargetVelocity(clientID,rightMotorHandle,rightMotorAngVel,simx_opmode_oneshot);
 }
@@ -55,10 +57,8 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 		simxGetObjectOrientation(clientID, cuboidHandle, -1, ObjectOrientation, simx_opmode_streaming);
 		simxGetObjectPosition(clientID,cuboidHandle,-1,ObjectPosition,simx_opmode_oneshot_wait);
 
-		ObjectOrientation[2] += 1.57;
 
-		GoalOrientation=atan2((GoalPosition[1]-ObjectPosition[1]),(GoalPosition[0]-ObjectPosition[0]));
-		OrientationError=ObjectOrientation[2]-GoalOrientation;
+		OrientationError=orientationError(ObjectPosition[0], ObjectPosition[1], ObjectOrientation[2], GoalPosition[0], GoalPosition[1]);
 		
 		AngVel=P*OrientationError;
 		MoveandRotate(LinVel, AngVel, radius, axis, clientID, leftMotorHandle, rightMotorHandle);
