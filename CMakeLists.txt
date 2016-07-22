@@ -13,7 +13,7 @@ else()
     include_directories(remoteApi)
     include_directories($ENV{VREP_HOME}/programming/include)
 
-    add_definitions(-DNON_MATLAB_PARSING -DMAX_EXT_API_CONNECTIONS=255 -D__linux -std=c++)
+    add_definitions(-DNON_MATLAB_PARSING -DMAX_EXT_API_CONNECTIONS=255 -D__linux -std=c++11)
 
     add_executable(robot main.cpp remoteApi/extApi.c remoteApi/extApiPlatform.c)
     target_link_libraries(robot pthread)

@@ -34,17 +34,17 @@ int MoveandRotate(float LinVel, float AngVel, float radius, float lengthWheelAxi
 {
        float leftMotorAngVel=(LinVel-AngVel*(lengthWheelAxis/2))/radius;
        float rightMotorAngVel=(LinVel+AngVel*(lengthWheelAxis/2))/radius;
-       std::cout << AngVel << ", " << leftMotorAngVel << ", " << rightMotorAngVel << "\n";
        simxSetJointTargetVelocity(clientID,leftMotorHandle,leftMotorAngVel,simx_opmode_oneshot);			
        simxSetJointTargetVelocity(clientID,rightMotorHandle,rightMotorAngVel,simx_opmode_oneshot);
+       printf("AngVel: %f Left: %f Right: %f\n", AngVel, leftMotorAngVel, rightMotorAngVel);
 }
 
 int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMotorHandle, int rightMotorHandle, int cuboidHandle)
 {
 	float radius=0.25;
 	float axis=0.5;
-	float P=0.7;
-	float LinVel=0.3;
+	float P=0.07;
+	float LinVel=0.4; // [m/s]
 	float AngVel;
 
 	float ObjectPosition[3];
@@ -66,7 +66,7 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 
 		OrientationError=orientationError(ObjectPosition[0], ObjectPosition[1], ObjectOrientation[2], GoalPosition[0], GoalPosition[1]);
 		
-		AngVel=P*OrientationError;
+		AngVel=P*OrientationError*180/M_PI; // [deg/s]
 		MoveandRotate(LinVel, AngVel, radius, axis, clientID, leftMotorHandle, rightMotorHandle);
 		printf("Distance: %f Robot: %f Error: %f\n", distance, ObjectOrientation[2], OrientationError); 
 
