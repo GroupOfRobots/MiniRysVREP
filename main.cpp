@@ -43,7 +43,7 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 {
 	float radius=0.25;
 	float axis=0.5;
-	float P=0.07;
+	float P=0.02;
 	float LinVel=0.4; // [m/s]
 	float AngVel;
 
@@ -73,9 +73,6 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 		distance=sqrt(pow(ObjectPosition[0]-GoalPosition[0],2)+pow(ObjectPosition[1]-GoalPosition[1],2));
 		
 		//printing data to file
-		
-	
-		
 		
 		auto now = std::chrono::system_clock::now();
 		auto duration = now.time_since_epoch();
