@@ -41,10 +41,10 @@ int MoveandRotate(float LinVel, float AngVel, float radius, float lengthWheelAxi
 
 int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMotorHandle, int rightMotorHandle, int cuboidHandle)
 {
-	float radius=0.25;
-	float axis=0.5;
+	float radius=0.05;
+	float axis=0.075;
 	float P=0.02;
-	float LinVel=0.4; // [m/s]
+	float LinVel=0.1; // [m/s]
 	float AngVel;
 
 	float ObjectPosition[3];
@@ -118,7 +118,7 @@ int main(int argc,char* argv[])
 		float ObjectPosition[3];
 		float GoalPosition[3];
 		float ObjectOrientation[3];
-		float minDistance=0.3;
+		float minDistance=0.05;
 
 		if (simxGetConnectionId(clientID)!=-1)
 		{  
