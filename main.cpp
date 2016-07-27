@@ -85,6 +85,11 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 	MoveandRotate(0, 0, radius, axis, clientID, leftMotorHandle, rightMotorHandle);
 }
 
+int LayDown()
+{
+	
+}
+
 
 
 int main(int argc,char* argv[])
