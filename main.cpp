@@ -85,7 +85,21 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 	MoveandRotate(0, 0, radius, axis, clientID, leftMotorHandle, rightMotorHandle);
 }
 
-int LayDown()
+int LayDown(int cuboidHandle)
+{
+	float mass;
+	float inertiaMatrix[9];
+	float centerOfMass[3];
+	simGetShapeMassAndInertia(cuboidHandle, mass, inertiaMatrix, centerOfMass, NULL);
+	if (centerOfMass[2]<0)
+	{
+		centerOfMass[2]=0.1;
+		simSetShapeMassAndInertia(cuboidHandle, mass, inertiaMatrix, centerOfMass, NULL);
+	}
+		
+}
+
+int StandUp()
 {
 	
 }
@@ -136,6 +150,7 @@ int main(int argc,char* argv[])
 
 
 			simxGetObjectPosition(clientID,goalHandle,-1,GoalPosition,simx_opmode_oneshot_wait);
+			LayDown(cuboidHandle);
 			MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
 			simxSetJointTargetVelocity(clientID,leftMotorHandle,0,simx_opmode_blocking);			
       		simxSetJointTargetVelocity(clientID,rightMotorHandle,0,simx_opmode_blocking);
