@@ -43,7 +43,7 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 {
 	float radius=0.05;
 	float axis=0.075;
-	float P=0.1;
+	float P=0.07;
 	float LinVel=0.4; // [m/s]
 	float AngVel;
 
@@ -173,8 +173,8 @@ int main(int argc,char* argv[])
 
 			simxGetObjectPosition(clientID,goalHandle,-1,GoalPosition,simx_opmode_oneshot_wait);
 			MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
-			//LayDown(clientID, pureMagicMotorHandle);
-			//StandUp(clientID, pureMagicMotorHandle);
+			LayDown(clientID, pureMagicMotorHandle);
+			StandUp(clientID, pureMagicMotorHandle);
 			
 
 			extApi_sleepMs(5);
