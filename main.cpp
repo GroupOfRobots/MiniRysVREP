@@ -43,8 +43,8 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 {
 	float radius=0.05;
 	float axis=0.075;
-	float P=0.02;
-	float LinVel=0.1; // [m/s]
+	float P=0.07;
+	float LinVel=0.4; // [m/s]
 	float AngVel;
 
 	float ObjectPosition[3];
@@ -82,26 +82,45 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 		
 		
 	}
-	MoveandRotate(0, 0, radius, axis, clientID, leftMotorHandle, rightMotorHandle);
+	simxSetJointTargetVelocity(clientID,leftMotorHandle,0,simx_opmode_blocking);			
+    simxSetJointTargetVelocity(clientID,rightMotorHandle,0,simx_opmode_blocking);
 }
 
-int LayDown(int cuboidHandle)
+int LayDown(int clientID, int pureMagicMotorHandle)
 {
-	float mass;
-	float inertiaMatrix[9];
-	float centerOfMass[3];
-	simGetShapeMassAndInertia(cuboidHandle, mass, inertiaMatrix, centerOfMass, NULL);
-	if (centerOfMass[2]<0)
+	float Position;
+	simxGetJointPosition(clientID, pureMagicMotorHandle, &Position, simx_opmode_streaming);
+	while(Position>-M_PI_2)
 	{
-		centerOfMass[2]=0.1;
-		simSetShapeMassAndInertia(cuboidHandle, mass, inertiaMatrix, centerOfMass, NULL);
+		std::cout << Position << " " << -M_PI_2 << std::endl;
+		simxSetJointTargetPosition(clientID, pureMagicMotorHandle, -M_PI_2, simx_opmode_streaming);
+		simxGetJointPosition(clientID, pureMagicMotorHandle, &Position, simx_opmode_buffer);
 	}
 		
 }
 
-int StandUp()
+int StandUp(int clientID, int pureMagicMotorHandle)
 {
-	
+	float Position;
+	simxGetJointPosition(clientID, pureMagicMotorHandle, &Position, simx_opmode_streaming);
+	if (Position<0)
+	{
+		while(Position<-0.1)
+		{
+			std::cout << Position << std::endl;
+			simxSetJointTargetPosition(clientID, pureMagicMotorHandle, 0, simx_opmode_streaming);
+			simxGetJointPosition(clientID, pureMagicMotorHandle, &Position, simx_opmode_buffer);
+		}
+	}
+	else
+	{
+		while(Position>0.1)
+		{
+			std::cout << Position << std::endl;
+			simxSetJointTargetPosition(clientID, pureMagicMotorHandle, 0, simx_opmode_streaming);
+			simxGetJointPosition(clientID, pureMagicMotorHandle, &Position, simx_opmode_buffer);
+		}
+	}
 }
 
 
@@ -113,14 +132,16 @@ int main(int argc,char* argv[])
 	int rightMotorHandle;
 	int cuboidHandle;
 	int goalHandle;
+	int pureMagicMotorHandle;
 
-	if (argc>=6)
+	if (argc>=7)
 	{
 		portNb=atoi(argv[1]);
 		leftMotorHandle=atoi(argv[2]);
 		rightMotorHandle=atoi(argv[3]);
 		cuboidHandle=atoi(argv[4]);
 		goalHandle=atoi(argv[5]);
+		pureMagicMotorHandle=atoi(argv[6]);
 	}
 	else
 	{
@@ -147,13 +168,15 @@ int main(int argc,char* argv[])
             simxGetObjectHandle(clientID, argv[3], &rightMotorHandle, simx_opmode_blocking);
 			simxGetObjectHandle(clientID, argv[4], &cuboidHandle, simx_opmode_blocking);
 			simxGetObjectHandle(clientID, argv[5], &goalHandle, simx_opmode_blocking);
+			simxGetObjectHandle(clientID, argv[6], &pureMagicMotorHandle, simx_opmode_blocking);
 
 
 			simxGetObjectPosition(clientID,goalHandle,-1,GoalPosition,simx_opmode_oneshot_wait);
-			LayDown(cuboidHandle);
 			MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
-			simxSetJointTargetVelocity(clientID,leftMotorHandle,0,simx_opmode_blocking);			
-      		simxSetJointTargetVelocity(clientID,rightMotorHandle,0,simx_opmode_blocking);
+			LayDown(clientID, pureMagicMotorHandle);
+			StandUp(clientID, pureMagicMotorHandle);
+			
+
 			extApi_sleepMs(5);
 
 		}
