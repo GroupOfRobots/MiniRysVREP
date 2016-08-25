@@ -30,20 +30,17 @@ extern "C" {
     #include "extApi.h"
 }
 
-int MoveandRotate(float LinVel, float AngVel, float radius, float lengthWheelAxis, int clientID, int leftMotorHandle, int rightMotorHandle)
+int MoveandRotate(float linVel, float angVel, int clientID)
 {
-       float leftMotorAngVel=(LinVel-AngVel*(lengthWheelAxis/2))/radius;
-       float rightMotorAngVel=(LinVel+AngVel*(lengthWheelAxis/2))/radius;
-       simxSetJointTargetVelocity(clientID,leftMotorHandle,leftMotorAngVel,simx_opmode_oneshot);			
-       simxSetJointTargetVelocity(clientID,rightMotorHandle,rightMotorAngVel,simx_opmode_oneshot);
-       printf("AngVel: %f Left: %f Right: %f\n", AngVel, leftMotorAngVel, rightMotorAngVel);
+       simxSetFloatSignal(clientID,"linVel",linVel,simx_opmode_streaming);
+       simxSetFloatSignal(clientID,"angVel",angVel,simx_opmode_streaming);
 }
 
 int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMotorHandle, int rightMotorHandle, int cuboidHandle)
 {
 	float radius=0.05;
 	float axis=0.075;
-	float P=0.07;
+	float P=0.06;
 	float LinVel=0.4; // [m/s]
 	float AngVel;
 
@@ -67,7 +64,7 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 		OrientationError=orientationError(ObjectPosition[0], ObjectPosition[1], ObjectOrientation[2], GoalPosition[0], GoalPosition[1]);
 		
 		AngVel=P*OrientationError*180/M_PI; // [deg/s]
-		MoveandRotate(LinVel, AngVel, radius, axis, clientID, leftMotorHandle, rightMotorHandle);
+		MoveandRotate(LinVel, AngVel, clientID);
 		printf("Distance: %f Robot: %f Error: %f\n", distance, ObjectOrientation[2], OrientationError); 
 
 		distance=sqrt(pow(ObjectPosition[0]-GoalPosition[0],2)+pow(ObjectPosition[1]-GoalPosition[1],2));
@@ -82,8 +79,7 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 		
 		
 	}
-	simxSetJointTargetVelocity(clientID,leftMotorHandle,0,simx_opmode_blocking);			
-    simxSetJointTargetVelocity(clientID,rightMotorHandle,0,simx_opmode_blocking);
+	MoveandRotate(0,0,clientID);
 }
 
 int LayDown(int clientID, int pureMagicMotorHandle)
@@ -152,6 +148,8 @@ int main(int argc,char* argv[])
 	int clientID=simxStart((simxChar*)"127.0.0.1",portNb,true,true,2000,5);
 	if (clientID!=-1)
 	{
+        simxSetFloatSignal(clientID,"linVel",0.,simx_opmode_oneshot);
+        simxSetFloatSignal(clientID,"andVel",0.,simx_opmode_oneshot);
 		int driveBackStartTime=-99000;
 		float motorSpeeds[2];
 		float leftMotorAngle;
@@ -175,7 +173,7 @@ int main(int argc,char* argv[])
 			MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
 			//LayDown(clientID, pureMagicMotorHandle);
 			//StandUp(clientID, pureMagicMotorHandle);
-			
+			//MoveandRotate(0.2,2.,clientID);
 
 			extApi_sleepMs(5);
 
