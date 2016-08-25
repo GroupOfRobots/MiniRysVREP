@@ -173,8 +173,8 @@ int main(int argc,char* argv[])
 
 			simxGetObjectPosition(clientID,goalHandle,-1,GoalPosition,simx_opmode_oneshot_wait);
 			MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
-			LayDown(clientID, pureMagicMotorHandle);
-			StandUp(clientID, pureMagicMotorHandle);
+			//LayDown(clientID, pureMagicMotorHandle);
+			//StandUp(clientID, pureMagicMotorHandle);
 			
 
 			extApi_sleepMs(5);
