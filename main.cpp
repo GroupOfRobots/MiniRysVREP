@@ -32,8 +32,8 @@ extern "C" {
 
 int MoveandRotate(float linVel, float angVel, int clientID)
 {
-       simxSetFloatSignal(clientID,"linVel",linVel,simx_opmode_streaming);
        simxSetFloatSignal(clientID,"angVel",angVel,simx_opmode_streaming);
+       simxSetFloatSignal(clientID,"linVel",linVel,simx_opmode_streaming);
 }
 
 int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMotorHandle, int rightMotorHandle, int cuboidHandle)
@@ -79,20 +79,13 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 		
 		
 	}
-	MoveandRotate(0,0,clientID);
+    simxSetFloatSignal(clientID,"angVel",0,simx_opmode_blocking);
+    simxSetFloatSignal(clientID,"linVel",0,simx_opmode_blocking);
 }
 
-int LayDown(int clientID, int pureMagicMotorHandle)
+int LayDown(int clientID)
 {
-	float Position;
-	simxGetJointPosition(clientID, pureMagicMotorHandle, &Position, simx_opmode_streaming);
-	while(Position>-M_PI_2)
-	{
-		std::cout << Position << " " << -M_PI_2 << std::endl;
-		simxSetJointTargetPosition(clientID, pureMagicMotorHandle, -M_PI_2, simx_opmode_streaming);
-		simxGetJointPosition(clientID, pureMagicMotorHandle, &Position, simx_opmode_buffer);
-	}
-		
+	simxSetIntegerSignal(clientID, "pozycja", 1, simx_opmode_oneshot);	
 }
 
 int StandUp(int clientID, int pureMagicMotorHandle)
@@ -130,14 +123,13 @@ int main(int argc,char* argv[])
 	int goalHandle;
 	int pureMagicMotorHandle;
 
-	if (argc>=7)
+	if (argc>=6)
 	{
 		portNb=atoi(argv[1]);
 		leftMotorHandle=atoi(argv[2]);
 		rightMotorHandle=atoi(argv[3]);
 		cuboidHandle=atoi(argv[4]);
 		goalHandle=atoi(argv[5]);
-		pureMagicMotorHandle=atoi(argv[6]);
 	}
 	else
 	{
@@ -166,14 +158,12 @@ int main(int argc,char* argv[])
             simxGetObjectHandle(clientID, argv[3], &rightMotorHandle, simx_opmode_blocking);
 			simxGetObjectHandle(clientID, argv[4], &cuboidHandle, simx_opmode_blocking);
 			simxGetObjectHandle(clientID, argv[5], &goalHandle, simx_opmode_blocking);
-			simxGetObjectHandle(clientID, argv[6], &pureMagicMotorHandle, simx_opmode_blocking);
 
 
 			simxGetObjectPosition(clientID,goalHandle,-1,GoalPosition,simx_opmode_oneshot_wait);
+			LayDown(clientID);
 			MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
-			//LayDown(clientID, pureMagicMotorHandle);
-			//StandUp(clientID, pureMagicMotorHandle);
-			//MoveandRotate(0.2,2.,clientID);
+			
 
 			extApi_sleepMs(5);
 
