@@ -43,10 +43,13 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 	float P=0.06;
 	float LinVel=0.4; // [m/s]
 	float AngVel;
+	int state;
 
 	float ObjectPosition[3];
 	float ObjectOrientation[3]; //rotation about Z --> ObjectOrientation[2]
 	float OrientationError;
+	float lMPosition[3];
+	float rMPosition[3];
 
 	simxGetObjectPosition(clientID,cuboidHandle,-1,ObjectPosition,simx_opmode_oneshot_wait);
 	
@@ -60,12 +63,16 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 		simxGetObjectOrientation(clientID, cuboidHandle, -1, ObjectOrientation, simx_opmode_streaming);
 		simxGetObjectPosition(clientID,cuboidHandle,-1,ObjectPosition,simx_opmode_oneshot_wait);
 
-
-		OrientationError=orientationError(ObjectPosition[0], ObjectPosition[1], ObjectOrientation[2], GoalPosition[0], GoalPosition[1]);
-		
+		//simxGetIntegerSignal(clientID,"pozycja",&state,simx_opmode_streaming);
+		//if (state==0)
+		//	OrientationError=orientationError(ObjectPosition[0], ObjectPosition[1], ObjectOrientation[2], GoalPosition[0], GoalPosition[1]);
+		//else
+		simxGetObjectPosition(clientID,leftMotorHandle,-1, lMPosition, simx_opmode_oneshot_wait);
+		simxGetObjectPosition(clientID,rightMotorHandle,-1, rMPosition, simx_opmode_oneshot_wait);
+		OrientationError=orientationError2(ObjectPosition[0], ObjectPosition[1], lMPosition, rMPosition, GoalPosition[0], GoalPosition[1]);
 		AngVel=P*OrientationError*180/M_PI; // [deg/s]
 		MoveandRotate(LinVel, AngVel, clientID);
-		printf("Distance: %f Robot: %f Error: %f\n", distance, ObjectOrientation[2], OrientationError); 
+		printf("Distance: %f Robot2: %f Robot0: %f Error: %f\n", distance, ObjectOrientation[2], ObjectOrientation[1], OrientationError); 
 
 		distance=sqrt(pow(ObjectPosition[0]-GoalPosition[0],2)+pow(ObjectPosition[1]-GoalPosition[1],2));
 		
@@ -85,31 +92,25 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 
 int LayDown(int clientID)
 {
+		
+	simxSetFloatSignal(clientID,"linVel",-5,simx_opmode_streaming);
+	simxSetFloatSignal(clientID,"angVel",0,simx_opmode_streaming);
 	simxSetIntegerSignal(clientID, "pozycja", 1, simx_opmode_oneshot);	
+
 }
 
-int StandUp(int clientID, int pureMagicMotorHandle)
+int StandUp(int clientID)
 {
-	float Position;
-	simxGetJointPosition(clientID, pureMagicMotorHandle, &Position, simx_opmode_streaming);
-	if (Position<0)
+	int stoi;
+	simxGetIntegerSignal(clientID,"stoi",&stoi,simx_opmode_streaming);
+	while (!stoi)
 	{
-		while(Position<-0.1)
-		{
-			std::cout << Position << std::endl;
-			simxSetJointTargetPosition(clientID, pureMagicMotorHandle, 0, simx_opmode_streaming);
-			simxGetJointPosition(clientID, pureMagicMotorHandle, &Position, simx_opmode_buffer);
-		}
+		simxSetFloatSignal(clientID,"angVel",0,simx_opmode_streaming);
+		simxSetFloatSignal(clientID, "linVel",1000, simx_opmode_streaming);
+		simxGetIntegerSignal(clientID,"stoi",&stoi,simx_opmode_streaming);
+		std::cout << "la";
 	}
-	else
-	{
-		while(Position>0.1)
-		{
-			std::cout << Position << std::endl;
-			simxSetJointTargetPosition(clientID, pureMagicMotorHandle, 0, simx_opmode_streaming);
-			simxGetJointPosition(clientID, pureMagicMotorHandle, &Position, simx_opmode_buffer);
-		}
-	}
+	simxSetIntegerSignal(clientID, "pozycja", 0, simx_opmode_streaming);	
 }
 
 
@@ -163,6 +164,7 @@ int main(int argc,char* argv[])
 			simxGetObjectPosition(clientID,goalHandle,-1,GoalPosition,simx_opmode_oneshot_wait);
 			LayDown(clientID);
 			MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
+			//StandUp(clientID);
 			
 
 			extApi_sleepMs(5);
