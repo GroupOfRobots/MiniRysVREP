@@ -92,23 +92,32 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 
 int LayDown(int clientID)
 {
-		
-	simxSetFloatSignal(clientID,"linVel",-5,simx_opmode_streaming);
-	simxSetFloatSignal(clientID,"angVel",0,simx_opmode_streaming);
-	simxSetIntegerSignal(clientID, "pozycja", 1, simx_opmode_oneshot);	
+	int i=0;	
+	simxSetIntegerSignal(clientID, "pozycja", 1, simx_opmode_streaming);	
+	//while(stoi)
+	while (i<100)
+	{
+		simxSetFloatSignal(clientID,"linVel",-5,simx_opmode_streaming);
+		simxSetFloatSignal(clientID,"angVel",0,simx_opmode_streaming);
+		i++;
+	}
+	simxSetFloatSignal(clientID,"linVel",0,simx_opmode_blocking);
+
 
 }
 
 int StandUp(int clientID)
 {
-	int stoi;
-	simxGetIntegerSignal(clientID,"stoi",&stoi,simx_opmode_streaming);
-	while (!stoi)
+
+	int i=0;
+	while (i<10)
 	{
 		simxSetFloatSignal(clientID,"angVel",0,simx_opmode_streaming);
-		simxSetFloatSignal(clientID, "linVel",1000, simx_opmode_streaming);
-		simxGetIntegerSignal(clientID,"stoi",&stoi,simx_opmode_streaming);
+		simxSetFloatSignal(clientID, "linVel",1, simx_opmode_streaming);
+		simxSetFloatSignal(clientID, "linVel",0, simx_opmode_streaming);
+		//simxGetIntegerSignal(clientID,"stoi",&stoi,simx_opmode_streaming);
 		std::cout << "la";
+		i++;
 	}
 	simxSetIntegerSignal(clientID, "pozycja", 0, simx_opmode_streaming);	
 }
