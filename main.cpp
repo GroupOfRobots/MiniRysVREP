@@ -117,9 +117,12 @@ int StandUp(int clientID)
 	std::cout << "Powinienem wstawac!";
 	//simxSetIntegerSignal(clientID,"lez",1,simx_opmode_streaming);
 	simxSetFloatSignal(clientID,"angVel",0,simx_opmode_streaming);
-	simxSetFloatSignal(clientID, "linVel",150., simx_opmode_streaming);
-	extApi_sleepMs(2000);
-	simxSetFloatSignal(clientID, "linVel",0.4, simx_opmode_blocking);
+	for (float i=150.; i>=0 ; i--) {
+		simxSetFloatSignal(clientID, "linVel",i, simx_opmode_streaming);
+		extApi_sleepMs(5);
+	}
+	extApi_sleepMs(50);
+	//simxSetFloatSignal(clientID, "linVel",0.4, simx_opmode_blocking);
 	//simxSetIntegerSignal(clientID, "pozycja", 0, simx_opmode_streaming);	
 		/*while (i<1)
 	{
