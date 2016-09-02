@@ -92,12 +92,13 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 
 int LayDown(int clientID)
 {
+	//simxSetIntegerSignal(clientID,"pozycja",2,simx_opmode_blocking);
 	int i=0;	
 	simxSetIntegerSignal(clientID, "pozycja", 1, simx_opmode_streaming);	
 	//while(stoi)
 	//while (i<100)
 	{
-		simxSetFloatSignal(clientID,"linVel",-2.8,simx_opmode_streaming);
+		simxSetFloatSignal(clientID,"linVel",0.01,simx_opmode_streaming);
 		simxSetFloatSignal(clientID,"angVel",0,simx_opmode_streaming);
 		i++;
 	}
@@ -185,10 +186,11 @@ int main(int argc,char* argv[])
 
 
 			simxGetObjectPosition(clientID,goalHandle,-1,GoalPosition,simx_opmode_oneshot_wait);
+			MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
 			LayDown(clientID);
-			//MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
-			StandUp(clientID);
-			
+			MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
+			//StandUp(clientID);
+			//MoveandRotate(0,0,clientID);
 
 			extApi_sleepMs(5);
 
