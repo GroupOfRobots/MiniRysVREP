@@ -92,49 +92,25 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 
 int LayDown(int clientID)
 {
-	//simxSetIntegerSignal(clientID,"pozycja",2,simx_opmode_blocking);
-	int i=0;	
-	simxSetIntegerSignal(clientID, "pozycja", 1, simx_opmode_streaming);	
-	//while(stoi)
-	//while (i<100)
+	simxSetIntegerSignal(clientID,"pozycja",2,simx_opmode_blocking);
+	int state;
+	simxGetIntegerSignal(clientID,"pozycja",&state,simx_opmode_streaming);
+	while(state!=1)
 	{
-		simxSetFloatSignal(clientID,"linVel",0.01,simx_opmode_streaming);
-		simxSetFloatSignal(clientID,"angVel",0,simx_opmode_streaming);
-		i++;
+		simxGetIntegerSignal(clientID,"pozycja",&state,simx_opmode_buffer);	
 	}
-	extApi_sleepMs(300);
-	simxSetFloatSignal(clientID,"linVel",0,simx_opmode_blocking);
-	extApi_sleepMs(2000);
-	
-	
-
-
 }
 
 int StandUp(int clientID)
 {
 
-	int i=0;
-	std::cout << "Powinienem wstawac!";
-	//simxSetIntegerSignal(clientID,"lez",1,simx_opmode_streaming);
-	simxSetFloatSignal(clientID,"angVel",0,simx_opmode_streaming);
-	for (float i=150.; i>=0 ; i--) {
-		simxSetFloatSignal(clientID, "linVel",i, simx_opmode_streaming);
-		extApi_sleepMs(5);
-	}
-	extApi_sleepMs(50);
-	//simxSetFloatSignal(clientID, "linVel",0.4, simx_opmode_blocking);
-	//simxSetIntegerSignal(clientID, "pozycja", 0, simx_opmode_streaming);	
-		/*while (i<1)
+	simxSetIntegerSignal(clientID,"pozycja",3,simx_opmode_blocking);
+	int state;
+	simxGetIntegerSignal(clientID,"pozycja",&state,simx_opmode_streaming);
+	while(state)
 	{
-		simxSetFloatSignal(clientID,"angVel",0,simx_opmode_streaming);
-		simxSetFloatSignal(clientID, "linVel",0.0001, simx_opmode_streaming);
-		//simxSetFloatSignal(clientID, "linVel",0, simx_opmode_streaming);
-		std::cout << "la";
-		i++;
+		simxGetIntegerSignal(clientID,"pozycja",&state,simx_opmode_buffer);	
 	}
-		
-	extApi_sleepMs(500);*/
 }
 
 
@@ -186,10 +162,11 @@ int main(int argc,char* argv[])
 
 
 			simxGetObjectPosition(clientID,goalHandle,-1,GoalPosition,simx_opmode_oneshot_wait);
-			MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
+			//MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
 			LayDown(clientID);
-			MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
-			//StandUp(clientID);
+			//MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
+			extApi_sleepMs(500);
+			StandUp(clientID);
 			//MoveandRotate(0,0,clientID);
 
 			extApi_sleepMs(5);
