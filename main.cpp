@@ -45,7 +45,7 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 {
 	float radius=0.05;
 	float axis=0.075;
-	float P=0.06;
+	float P=0.1;
 	float LinVel=0.4; // [m/s]
 	float AngVel;
 	int state;
