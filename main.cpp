@@ -62,7 +62,7 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 	auto snow = std::chrono::system_clock::now();
 	auto sduration = snow.time_since_epoch();
 	auto smillis = std::chrono::duration_cast<std::chrono::milliseconds>(sduration).count();
-	
+
 	while (distance>minDistance)
 	{
 		simxGetObjectOrientation(clientID, cuboidHandle, -1, ObjectOrientation, simx_opmode_streaming);
@@ -166,13 +166,13 @@ int main(int argc,char* argv[])
 
 
 			simxGetObjectPosition(clientID,goalHandle,-1,GoalPosition,simx_opmode_oneshot_wait);
-			//MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
-			LayDown(clientID);
+			MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
+			//LayDown(clientID);
 			//extApi_sleepMs(1000);
 			//MoveandRotate(-8,0,clientID);
 			//MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
 			//extApi_sleepMs(1000);
-			StandUp(clientID);
+			//StandUp(clientID);
 			//MoveandRotate(0,0,clientID);
 
 			extApi_sleepMs(5);
