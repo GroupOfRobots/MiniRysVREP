@@ -166,13 +166,13 @@ int main(int argc,char* argv[])
 
 
 			simxGetObjectPosition(clientID,goalHandle,-1,GoalPosition,simx_opmode_oneshot_wait);
-			MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
-			//LayDown(clientID);
+			//MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
+			LayDown(clientID);
 			//extApi_sleepMs(1000);
 			//MoveandRotate(-8,0,clientID);
 			//MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
 			//extApi_sleepMs(1000);
-			//StandUp(clientID);
+			StandUp(clientID);
 			//MoveandRotate(0,0,clientID);
 
 			extApi_sleepMs(5);
