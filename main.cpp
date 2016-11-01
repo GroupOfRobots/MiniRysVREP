@@ -43,9 +43,9 @@ int Stop(int clientID)
 
 int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMotorHandle, int rightMotorHandle, int cuboidHandle)
 {
-	float radius=0.05;
-	float axis=0.075;
-	float P=0.06;
+	float radius=0.043;
+	float axis=0.112;
+	float P=0.05;
 	float LinVel=0.4; // [m/s]
 	float AngVel;
 	int state;
@@ -70,15 +70,15 @@ int MovetoPoint(float *GoalPosition, float minDistance, int clientID, int leftMo
 
 		//simxGetIntegerSignal(clientID,"pozycja",&state,simx_opmode_streaming);
 		//if (state==0)
-		//	OrientationError=orientationError(ObjectPosition[0], ObjectPosition[1], ObjectOrientation[2], GoalPosition[0], GoalPosition[1]);
+		//OrientationError=orientationError(ObjectPosition[0], ObjectPosition[1], ObjectOrientation[2], GoalPosition[0], GoalPosition[1]);
 		//else
 		simxGetObjectPosition(clientID,leftMotorHandle,-1, lMPosition, simx_opmode_oneshot_wait);
 		simxGetObjectPosition(clientID,rightMotorHandle,-1, rMPosition, simx_opmode_oneshot_wait);
 		OrientationError=orientationError2(ObjectPosition[0], ObjectPosition[1], lMPosition, rMPosition, GoalPosition[0], GoalPosition[1]);
 		AngVel=P*OrientationError*180/M_PI; // [deg/s]
 		MoveandRotate(LinVel, AngVel, clientID);
-		printf("Distance: %f Robot2: %f Robot0: %f Error: %f\n", distance, ObjectOrientation[2], ObjectOrientation[1], OrientationError); 
-
+		//printf("Distance: %f Robot2: %f Robot0: %f Error: %f\n", distance, ObjectOrientation[2], ObjectOrientation[1], OrientationError); 
+		//std::cout << "angVel" << AngVel;
 		distance=sqrt(pow(ObjectPosition[0]-GoalPosition[0],2)+pow(ObjectPosition[1]-GoalPosition[1],2));
 		
 		//printing data to file
@@ -167,12 +167,12 @@ int main(int argc,char* argv[])
 
 			simxGetObjectPosition(clientID,goalHandle,-1,GoalPosition,simx_opmode_oneshot_wait);
 			//MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
-			LayDown(clientID);
+			//LayDown(clientID);
 			//extApi_sleepMs(1000);
-			//MoveandRotate(-8,0,clientID);
+			MoveandRotate(0.4,0,clientID);
 			//MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
 			//extApi_sleepMs(1000);
-			StandUp(clientID);
+			//StandUp(clientID);
 			//MoveandRotate(0,0,clientID);
 
 			extApi_sleepMs(5);
