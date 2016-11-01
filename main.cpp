@@ -169,8 +169,8 @@ int main(int argc,char* argv[])
 			//MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
 			//LayDown(clientID);
 			//extApi_sleepMs(1000);
-			MoveandRotate(0.4,0,clientID);
-			//MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
+			//MoveandRotate(0.4,0,clientID);
+			MovetoPoint(GoalPosition, minDistance, clientID, leftMotorHandle, rightMotorHandle, cuboidHandle);
 			//extApi_sleepMs(1000);
 			//StandUp(clientID);
 			//MoveandRotate(0,0,clientID);

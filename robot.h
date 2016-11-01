@@ -50,6 +50,6 @@ float orientationError2(float obj_x, float obj_y, float lPosition[3], float rPos
 	std::cout << "OR: " << WheelsOrientation << " GO: " << GoalOrientation << " ER: " << res << "\n";
 #endif
 
-	return -res;
+	return res;
 }
 #endif
