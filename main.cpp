@@ -33,26 +33,31 @@ extern "C" {
 int main()
 {
 	rys rozowy(19999, "rozowy");
+	rys niebieski(20000, "niebieski");
+	rys zielony(20001, "zielony");
 
-	if (rozowy.valid())
+	if (rozowy.valid() && niebieski.valid() && zielony.valid())
 	{
 		float minDistance=0.05;
+		rozowy.getData("RysLeftMotor", "RysRightMotor", "Rys", "Goal");
+		niebieski.getData("RysLeftMotor2", "RysRightMotor2", "Rys2", "Goal2");
+		zielony.getData("RysLeftMotor3", "RysRightMotor3", "Rys3", "Goal3");
+			
 
-		if (rozowy.valid2())
+		while (rozowy.valid2() && niebieski.valid2() && zielony.valid2())
 		{  
 			simxUChar sensorTrigger=0;
-			rozowy.getData("RysLeftMotor", "RysRightMotor", "Rys", "Goal");
-			//rozowy.layDown();
-			rozowy.moveToPoint(minDistance);
-			//rozowy.standUp();
-			std::cout << "Done!\n" << std::endl;
+		
+
+			zielony.moveAndRotate(0,20);
+			niebieski.moveAndRotate(0.4,0);
+			rozowy.moveAndRotate(0.2,5);
 
 
 			extApi_sleepMs(5);
 
 		}
-		else
-		printf("Fin!\n");
+		
 	}
 	else {std::cout << "no cos nie pyklo\n" << std::endl;}
 	return(0);

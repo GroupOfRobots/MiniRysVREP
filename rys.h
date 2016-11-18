@@ -39,6 +39,7 @@ class rys{
 		bool valid2() {
 				return (simxGetConnectionId(clientID)!=-1);
 		}
+		void moveAndRotate(float linVel, float angVel);
 	private:
 		int clientID;
 		
@@ -53,7 +54,7 @@ class rys{
 		int goalHandle;
 		
 		//low-level functions
-		void moveAndRotate(float linVel, float angVel);
+		
 		void stop();
 		void setTarget();
 		
