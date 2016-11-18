@@ -32,20 +32,20 @@ extern "C" {
 
 int main()
 {
-	rys rozowy(19999);
+	rys rozowy(19999, "rozowy");
 
-	if (rozowy.clientID!=-1)
+	if (rozowy.valid())
 	{
-
 		float minDistance=0.05;
 
-		if (simxGetConnectionId(rozowy.clientID)!=-1)
+		if (rozowy.valid2())
 		{  
 			simxUChar sensorTrigger=0;
-			
 			rozowy.getData("RysLeftMotor", "RysRightMotor", "Rys", "Goal");
+			//rozowy.layDown();
 			rozowy.moveToPoint(minDistance);
-			std::cout << "Done!\n";
+			//rozowy.standUp();
+			std::cout << "Done!\n" << std::endl;
 
 
 			extApi_sleepMs(5);
@@ -54,6 +54,7 @@ int main()
 		else
 		printf("Fin!\n");
 	}
+	else {std::cout << "no cos nie pyklo\n" << std::endl;}
 	return(0);
 }
 

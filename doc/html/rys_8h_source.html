@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.11"/>
+<title>Mini RYŚ - symulatory: Plik źródłowy /home/mpacuszk/GroupOfRobots/RobotSimulator/rys.h</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() { init_search(); });
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Mini RYŚ - symulatory
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Wygenerowano przez Doxygen 1.8.11 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search",false,'Szukaj');
+</script>
+  <div id="navrow1" class="tabs">
+    <ul class="tablist">
+      <li><a href="index.html"><span>Strona&#160;główna</span></a></li>
+      <li><a href="pages.html"><span>Dodatkowe&#160;strony</span></a></li>
+      <li><a href="annotated.html"><span>Klasy</span></a></li>
+      <li class="current"><a href="files.html"><span>Pliki</span></a></li>
+      <li>
+        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <img id="MSearchSelect" src="search/mag_sel.png"
+               onmouseover="return searchBox.OnSearchSelectShow()"
+               onmouseout="return searchBox.OnSearchSelectHide()"
+               alt=""/>
+          <input type="text" id="MSearchField" value="Szukaj" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.png" alt=""/></a>
+          </span>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="files.html"><span>Lista&#160;plików</span></a></li>
+    </ul>
+  </div>
+</div><!-- top -->
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div class="header">
+  <div class="headertitle">
+<div class="title">/home/mpacuszk/GroupOfRobots/RobotSimulator/rys.h</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef RYS_H_</span></div><div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define RYS_H_</span></div><div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;</div><div class="line"><a name="l00004"></a><span class="lineno"><a class="line" href="classrys.html">    4</a></span>&#160;<span class="keyword">class </span><a class="code" href="classrys.html">rys</a>{</div><div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;    <span class="keyword">public</span>:</div><div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;                </div><div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;        <a class="code" href="classrys.html">rys</a>(<span class="keywordtype">int</span>,<span class="keyword">const</span> std::string&amp;);</div><div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;        ~<a class="code" href="classrys.html">rys</a>();</div><div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;        </div><div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classrys.html#adbf19e8f5b82484725892d7809ecef8a">getData</a>(<span class="keyword">const</span> <span class="keywordtype">char</span>* lMH, <span class="keyword">const</span> <span class="keywordtype">char</span>* rMH, <span class="keyword">const</span> <span class="keywordtype">char</span>* cH, <span class="keyword">const</span> <span class="keywordtype">char</span>* gH);</div><div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        </div><div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keywordtype">float</span> goalPosition[3];</div><div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        </div><div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classrys.html#a73dc6adc06bb947f1cee5b47edd2f824">moveToPoint</a>(<span class="keywordtype">float</span> minDistance);</div><div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keywordtype">void</span> layDown();</div><div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keywordtype">void</span> standUp();</div><div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        </div><div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        </div><div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keyword">private</span>:</div><div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="comment">//konstruktor</span></div><div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="keywordtype">int</span> clientID;</div><div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        </div><div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        std::string nazwa;</div><div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        </div><div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordtype">int</span> leftMotorHandle;</div><div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordtype">int</span> rightMotorHandle;</div><div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordtype">int</span> cuboidHandle;</div><div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keywordtype">int</span> goalHandle;</div><div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        </div><div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="comment">//low-level functions</span></div><div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keywordtype">void</span> moveAndRotate(<span class="keywordtype">float</span> linVel, <span class="keywordtype">float</span> angVel);</div><div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordtype">void</span> stop();</div><div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keywordtype">void</span> setTarget();</div><div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        </div><div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;};</div><div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">#endif</span></div><div class="ttc" id="classrys_html_a73dc6adc06bb947f1cee5b47edd2f824"><div class="ttname"><a href="classrys.html#a73dc6adc06bb947f1cee5b47edd2f824">rys::moveToPoint</a></div><div class="ttdeci">void moveToPoint(float minDistance)</div><div class="ttdef"><b>Definition:</b> moveToPoint.cpp:8</div></div>
+<div class="ttc" id="classrys_html"><div class="ttname"><a href="classrys.html">rys</a></div><div class="ttdef"><b>Definition:</b> rys.h:4</div></div>
+<div class="ttc" id="classrys_html_adbf19e8f5b82484725892d7809ecef8a"><div class="ttname"><a href="classrys.html#adbf19e8f5b82484725892d7809ecef8a">rys::getData</a></div><div class="ttdeci">void getData(const char *lMH, const char *rMH, const char *cH, const char *gH)</div><div class="ttdef"><b>Definition:</b> rys.cpp:17</div></div>
+</div><!-- fragment --></div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Wygenerowano przez &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.11
+</small></address>
+</body>
+</html>

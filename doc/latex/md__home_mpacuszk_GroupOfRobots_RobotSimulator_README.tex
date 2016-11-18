@@ -1,0 +1,36 @@
+V\+R\+EP simulation repo
+
+\subsection*{Build}
+
+
+\begin{DoxyCode}
+1 export VREP\_HOME=/home/user/vrep/...
+2 
+3 mkdir build
+4 cd build
+5 cmake ..
+6 make
+\end{DoxyCode}
+
+
+\subsection*{Run}
+
+
+\begin{DoxyCode}
+1 cd build
+2 ./robot PORT LeftMotor RoghtMotor
+\end{DoxyCode}
+
+
+\subsection*{Run tests and code coverage}
+
+
+\begin{DoxyCode}
+1 cd build
+2 cmake .. -DCMAKE\_BUILD\_TYPE=Debug
+3 ctest --verbose
+4 make test\_coverage
+\end{DoxyCode}
+
+
+After successful run coverage results are placed in {\ttfamily build/coverage/index.\+html}. 
