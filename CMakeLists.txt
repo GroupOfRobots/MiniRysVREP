@@ -17,6 +17,10 @@ else()
 
     add_executable(robot main.cpp rys.cpp moveToPoint.cpp remoteApi/extApi.c remoteApi/extApiPlatform.c)
     target_link_libraries(robot pthread)
+
+    add_executable(robot_threads main_threads.cpp rys.cpp moveToPoint.cpp remoteApi/extApi.c remoteApi/extApiPlatform.c)
+    target_link_libraries(robot_threads pthread)
+
     
 endif()
 

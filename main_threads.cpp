@@ -25,46 +25,39 @@
 #include <iostream>
 #define DEBUG
 #include "rys.h"
+#include <thread>
 
 extern "C" {
     #include "extApi.h"
 }
 
-int main()
-{
-	rys rozowy(19999, "rozowy");
-	rys niebieski(20000, "niebieski");
-	rys zielony(20001, "zielony");
-	rys fioletowy(20002, "fioletowy");
-	rys zolty(20003, "zolty");
-	rys pomaranczowy(20004, "pomaranczowy");
+void rysiu_zyj(int port, const std::string & col, const std::string & suffix) {
+	rys robot(port, col);
 
-	if (rozowy.valid() && niebieski.valid() && zielony.valid() && fioletowy.valid() && zolty.valid() && pomaranczowy.valid())
-	{
-		float minDistance=0.05;
-		rozowy.getData("RysLeftMotor", "RysRightMotor", "Rys", "Goal");
-		niebieski.getData("RysLeftMotor2", "RysRightMotor2", "Rys2", "Goal2");
-		zielony.getData("RysLeftMotor3", "RysRightMotor3", "Rys3", "Goal3");
-		fioletowy.getData("RysLeftMotor4", "RysRightMotor4", "Rys4", "Goal4");
-		zolty.getData("RysLeftMotor5", "RysRightMotor5", "Rys5", "Goal5");
-		pomaranczowy.getData("RysLeftMotor6", "RysRightMotor6", "Rys6", "Goal6");
-			
+	if (robot.valid()) {
+		robot.getData("RysLeftMotor" + suffix, "RysRightMotor" + suffix, "Rys" + suffix, "Goal" + suffix);
 
-		while (rozowy.valid2() && niebieski.valid2() && zielony.valid2() && fioletowy.valid2() && zolty.valid2() && pomaranczowy.valid2())
-		{  
-			simxUChar sensorTrigger=0;
-		
-
-			zielony.moveAndRotate(0,20);
-			niebieski.moveAndRotate(0.4,0);
-			rozowy.moveAndRotate(0.2,5);
-
-
+		if(robot.valid2()) {
+			robot.moveToPoint(0.05);	
 			extApi_sleepMs(5);
-
 		}
-		
 	}
+}
+
+
+
+
+
+
+int main()
+{	
+	std::thread t1(rysiu_zyj, 19999, "rozowy", "");
+	std::thread t2(rysiu_zyj, 20000, "niebieski", "2");
+	std::thread t3(rysiu_zyj, 20001, "zielony", "3");
+	std::thread t4(rysiu_zyj, 20001, "fioletowy", "4");
+	t1.join();
+	t2.join();
+			
 	return(0);
 }
 

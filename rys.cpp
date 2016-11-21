@@ -32,12 +32,12 @@ rys::~rys()
 	simxFinish(clientID);
 }
 
-void rys::getData(const char* lMH, const char* rMH, const char* cH, const char* gH)
+void rys::getData(const std::string & lMH, const std::string & rMH, const std::string & cH, const std::string & gH)
 {
-	simxGetObjectHandle(clientID, lMH, &leftMotorHandle, simx_opmode_blocking);
-    simxGetObjectHandle(clientID, rMH, &rightMotorHandle, simx_opmode_blocking);
-	simxGetObjectHandle(clientID, cH, &cuboidHandle, simx_opmode_blocking);
-	simxGetObjectHandle(clientID, gH, &goalHandle, simx_opmode_blocking);
+	simxGetObjectHandle(clientID, lMH.c_str(), &leftMotorHandle, simx_opmode_blocking);
+    simxGetObjectHandle(clientID, rMH.c_str(), &rightMotorHandle, simx_opmode_blocking);
+	simxGetObjectHandle(clientID, cH.c_str(), &cuboidHandle, simx_opmode_blocking);
+	simxGetObjectHandle(clientID, gH.c_str(), &goalHandle, simx_opmode_blocking);
 }
 void rys::moveAndRotate(float linVel, float angVel)
 {

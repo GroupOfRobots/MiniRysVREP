@@ -19,7 +19,7 @@ class rys{
 		 * \param cH name of the body of the robot handle
 		 * \param gH name of the goal handle
 		 */
-		void getData(const char* lMH, const char* rMH, const char* cH, const char* gH);
+		void getData(const std::string & lMH, const std::string & rMH, const std::string & cH, const std::string & gH);
 		
 		float goalPosition[3];
 		
