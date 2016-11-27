@@ -14,17 +14,6 @@ rys::rys(int portNb, const std::string& nazwa)
 	positionSignal=nazwa+"_pozycja";
 	stopSignal=nazwa+"_stop";
 	
-	/*linVelSignal=lv.c_str();
-	std::cout << linVelSignal << std::endl;
-	angVelSignal=av.c_str();
-	
-	positionSignal=p.c_str();
-	std::cout << "DUPA\n";
-	std::cout << s << std::endl;
-	stopSignal=s.c_str();
-	std::cout << stopSignal <<std::endl;
-	std::cout << "aaaa" <<std::endl;*/
-	
 }
 
 rys::~rys()
@@ -41,7 +30,6 @@ void rys::getData(const std::string & lMH, const std::string & rMH, const std::s
 }
 void rys::moveAndRotate(float linVel, float angVel)
 {
-       std::cout << linVelSignal << std::endl;
        simxSetFloatSignal(clientID,angVelSignal.c_str(),angVel,simx_opmode_oneshot);
        simxSetFloatSignal(clientID,linVelSignal.c_str(),linVel,simx_opmode_oneshot);
  }

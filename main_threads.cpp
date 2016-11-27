@@ -38,12 +38,28 @@ void rysiu_zyj(int port, const std::string & col, const std::string & suffix) {
 		robot.getData("RysLeftMotor" + suffix, "RysRightMotor" + suffix, "Rys" + suffix, "Goal" + suffix);
 
 		if(robot.valid2()) {
-			robot.moveToPoint(0.05);	
+			//robot.moveToPoint(0.05);	
+			robot.layDown();
+			robot.moveToPoint(0.05);
 			extApi_sleepMs(5);
 		}
 	}
 }
 
+void rysiu_zyj2(int port, const std::string & col, const std::string & suffix) {
+	rys robot(port, col);
+
+	if (robot.valid()) {
+		robot.getData("RysLeftMotor" + suffix, "RysRightMotor" + suffix, "Rys" + suffix, "Goal" + suffix);
+
+		if(robot.valid2()) {
+			//robot.moveToPoint(0.05);	
+			//robot.layDown();
+			robot.moveToPoint(0.05);
+			extApi_sleepMs(5);
+		}
+	}
+}
 
 
 
@@ -54,9 +70,15 @@ int main()
 	std::thread t1(rysiu_zyj, 19999, "rozowy", "");
 	std::thread t2(rysiu_zyj, 20000, "niebieski", "2");
 	std::thread t3(rysiu_zyj, 20001, "zielony", "3");
-	std::thread t4(rysiu_zyj, 20001, "fioletowy", "4");
+	std::thread t4(rysiu_zyj, 20002, "fioletowy", "4");
+	std::thread t5(rysiu_zyj2, 20003, "zolty", "5");
+	std::thread t6(rysiu_zyj2, 20004, "pomaranczowy", "6");
 	t1.join();
 	t2.join();
+	t3.join();
+	t4.join();
+	t5.join();
+	t6.join();
 			
 	return(0);
 }
