@@ -33,31 +33,34 @@ extern "C" {
 int main()
 {
 	rys rozowy(19999, "rozowy");
-	rys niebieski(20000, "niebieski");
-	rys zielony(20001, "zielony");
-	rys fioletowy(20002, "fioletowy");
-	rys zolty(20003, "zolty");
-	rys pomaranczowy(20004, "pomaranczowy");
+	//rys niebieski(20000, "niebieski");
+	//rys zielony(20001, "zielony");
+	//rys fioletowy(20002, "fioletowy");
+	//rys zolty(20003, "zolty");
+	//rys pomaranczowy(20004, "pomaranczowy");
 
-	if (rozowy.valid() && niebieski.valid() && zielony.valid() && fioletowy.valid() && zolty.valid() && pomaranczowy.valid())
+	if (rozowy.valid())
 	{
 		float minDistance=0.05;
 		rozowy.getData("RysLeftMotor", "RysRightMotor", "Rys", "Goal");
-		niebieski.getData("RysLeftMotor2", "RysRightMotor2", "Rys2", "Goal2");
+		/*niebieski.getData("RysLeftMotor2", "RysRightMotor2", "Rys2", "Goal2");
 		zielony.getData("RysLeftMotor3", "RysRightMotor3", "Rys3", "Goal3");
 		fioletowy.getData("RysLeftMotor4", "RysRightMotor4", "Rys4", "Goal4");
 		zolty.getData("RysLeftMotor5", "RysRightMotor5", "Rys5", "Goal5");
-		pomaranczowy.getData("RysLeftMotor6", "RysRightMotor6", "Rys6", "Goal6");
+		pomaranczowy.getData("RysLeftMotor6", "RysRightMotor6", "Rys6", "Goal6");*/
 			
 
-		while (rozowy.valid2() && niebieski.valid2() && zielony.valid2() && fioletowy.valid2() && zolty.valid2() && pomaranczowy.valid2())
+		if (rozowy.valid2())
 		{  
 			simxUChar sensorTrigger=0;
 		
 
-			zielony.moveAndRotate(0,20);
-			niebieski.moveAndRotate(0.4,0);
-			rozowy.moveAndRotate(0.2,5);
+			
+			//rozowy.moveToPoint(minDistance);
+			rozowy.layDown();
+			//rozowy.standUp();
+			//rozowy.layDown();
+			rozowy.moveAndRotate(-0.4,0);
 
 
 			extApi_sleepMs(5);
