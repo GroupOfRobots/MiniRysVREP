@@ -10,6 +10,10 @@ class rys{
 				
 		rys(int,const std::string&);
 		~rys();
+		float sensorUpVal;
+		float sensorFrontVal;
+		float sensorBackVal;
+		
 		
 		/**
 		 * Funkcja zwraca dane bieżącego robota.
@@ -39,7 +43,6 @@ class rys{
 		bool valid2() {
 				return (simxGetConnectionId(clientID)!=-1);
 		}
-		void moveAndRotate(float linVel, float angVel);
 	private:
 		int clientID;
 		
@@ -47,15 +50,20 @@ class rys{
 		std::string angVelSignal;
 		std::string positionSignal;
 		std::string stopSignal;
+		std::string sensorUpSignal;
+		std::string sensorFrontSignal;
+		std::string sensorBackSignal;
 		
 		int leftMotorHandle;
 		int rightMotorHandle;
 		int cuboidHandle;
 		int goalHandle;
 		
-		//low-level functions
 		
+		//low-level functions
+		void moveAndRotate(float linVel, float angVel);
 		void stop();
+		void readSensors();
 		void setTarget();
 		
 };

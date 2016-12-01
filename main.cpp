@@ -58,9 +58,9 @@ int main()
 			
 			//rozowy.moveToPoint(minDistance);
 			rozowy.layDown();
-			//rozowy.standUp();
+			rozowy.standUp();
 			//rozowy.layDown();
-			rozowy.moveAndRotate(-0.4,0);
+			//rozowy.moveAndRotate(-0.4,0);
 
 
 			extApi_sleepMs(5);

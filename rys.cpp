@@ -13,6 +13,9 @@ rys::rys(int portNb, const std::string& nazwa)
 	angVelSignal=nazwa+"_angVel";
 	positionSignal=nazwa+"_pozycja";
 	stopSignal=nazwa+"_stop";
+	sensorBackSignal=nazwa+"_sensorBack";
+	sensorFrontSignal=nazwa+"_sensorFront";
+	sensorUpSignal=nazwa+"_sensorUp";
 	
 }
 
@@ -65,4 +68,11 @@ void rys::standUp()
 void rys::setTarget()
 {
 	simxGetObjectPosition(clientID,goalHandle,-1,goalPosition,simx_opmode_oneshot_wait);
+}
+
+void rys::readSensors()
+{
+	simxGetFloatSignal(clientID,sensorFrontSignal.c_str(), &sensorFrontVal,simx_opmode_streaming);
+	simxGetFloatSignal(clientID,sensorBackSignal.c_str(), &sensorBackVal,simx_opmode_streaming);
+	simxGetFloatSignal(clientID,sensorUpSignal.c_str(), &sensorUpVal,simx_opmode_streaming);
 }
