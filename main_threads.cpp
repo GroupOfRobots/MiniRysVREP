@@ -25,49 +25,61 @@
 #include <iostream>
 #define DEBUG
 #include "rys.h"
+#include <thread>
 
 extern "C" {
     #include "extApi.h"
 }
 
-int main()
-{
-	rys rozowy(19999, "rozowy");
-	//rys niebieski(20000, "niebieski");
-	//rys zielony(20001, "zielony");
-	//rys fioletowy(20002, "fioletowy");
-	//rys zolty(20003, "zolty");
-	//rys pomaranczowy(20004, "pomaranczowy");
+void rysiu_zyj(int port, const std::string & col, const std::string & suffix) {
+	rys robot(port, col);
 
-	if (rozowy.valid())
-	{
-		float minDistance=0.05;
-		rozowy.getData("RysLeftMotor", "RysRightMotor", "Rys", "Goal");
-		/*niebieski.getData("RysLeftMotor2", "RysRightMotor2", "Rys2", "Goal2");
-		zielony.getData("RysLeftMotor3", "RysRightMotor3", "Rys3", "Goal3");
-		fioletowy.getData("RysLeftMotor4", "RysRightMotor4", "Rys4", "Goal4");
-		zolty.getData("RysLeftMotor5", "RysRightMotor5", "Rys5", "Goal5");
-		pomaranczowy.getData("RysLeftMotor6", "RysRightMotor6", "Rys6", "Goal6");*/
-			
+	if (robot.valid()) {
+		robot.getData("RysLeftMotor" + suffix, "RysRightMotor" + suffix, "Rys" + suffix, "Goal" + suffix);
 
-		if (rozowy.valid2())
-		{  
-			simxUChar sensorTrigger=0;
-		
-
-			
-			//rozowy.moveToPoint(minDistance);
-			rozowy.layDown();
-			rozowy.standUp();
-			//rozowy.layDown();
-			//rozowy.moveAndRotate(-0.4,0);
-
-
+		if(robot.valid2()) {
+			//robot.moveToPoint(0.05);	
+			robot.layDown();
+			robot.moveToPoint(0.05);
 			extApi_sleepMs(5);
-
 		}
-		
 	}
+}
+
+void rysiu_zyj2(int port, const std::string & col, const std::string & suffix) {
+	rys robot(port, col);
+
+	if (robot.valid()) {
+		robot.getData("RysLeftMotor" + suffix, "RysRightMotor" + suffix, "Rys" + suffix, "Goal" + suffix);
+
+		if(robot.valid2()) {
+			//robot.moveToPoint(0.05);	
+			//robot.layDown();
+			robot.moveToPoint(0.05);
+			extApi_sleepMs(5);
+		}
+	}
+}
+
+
+
+
+
+int main()
+{	
+	std::thread t1(rysiu_zyj, 19999, "rozowy", "");
+	std::thread t2(rysiu_zyj, 20000, "niebieski", "2");
+	std::thread t3(rysiu_zyj, 20001, "zielony", "3");
+	std::thread t4(rysiu_zyj, 20002, "fioletowy", "4");
+	std::thread t5(rysiu_zyj2, 20003, "zolty", "5");
+	std::thread t6(rysiu_zyj2, 20004, "pomaranczowy", "6");
+	t1.join();
+	t2.join();
+	t3.join();
+	t4.join();
+	t5.join();
+	t6.join();
+			
 	return(0);
 }
 
