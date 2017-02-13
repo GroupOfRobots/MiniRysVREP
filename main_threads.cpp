@@ -37,7 +37,7 @@ void rysiu_zyj(int port, const std::string & col, const std::string & suffix) {
 	if (robot.valid()) {
 		robot.getData("RysLeftMotor" + suffix, "RysRightMotor" + suffix, "Rys" + suffix, "Goal" + suffix);
 
-		if(robot.valid2()) {
+		if(robot.connected()) {
 			//robot.moveToPoint(0.05);	
 			robot.layDown();
 			robot.moveToPoint(0.05);
@@ -52,7 +52,7 @@ void rysiu_zyj2(int port, const std::string & col, const std::string & suffix) {
 	if (robot.valid()) {
 		robot.getData("RysLeftMotor" + suffix, "RysRightMotor" + suffix, "Rys" + suffix, "Goal" + suffix);
 
-		if(robot.valid2()) {
+		if(robot.connected()) {
 			//robot.moveToPoint(0.05);	
 			//robot.layDown();
 			robot.moveToPoint(0.05);

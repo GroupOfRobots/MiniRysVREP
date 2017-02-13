@@ -36,11 +36,13 @@ class rys{
 		void moveToPoint(float minDistance);
 		void layDown();
 		void standUp();
+		bool isTheObstacleAhead(float distance);
+
 		
 		bool valid() {
 				return (clientID != -1);
 		}
-		bool valid2() {
+		bool connected() {
 				return (simxGetConnectionId(clientID)!=-1);
 		}
 	private:
@@ -63,8 +65,7 @@ class rys{
 		//low-level functions
 		void moveAndRotate(float linVel, float angVel);
 		void stop();
-		void readSensors();
 		void setTarget();
-		
+		void readSensors();
 };
 #endif

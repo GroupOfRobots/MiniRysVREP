@@ -38,6 +38,8 @@ void rys::moveToPoint(float minDistance)
 		AngVel=P*OrientationError*180/M_PI; // [deg/s]
 		moveAndRotate(LinVel, AngVel);
 		distance=sqrt(pow(ObjectPosition[0]-goalPosition[0],2)+pow(ObjectPosition[1]-goalPosition[1],2));
+		if (isTheObstacleAhead(0.15))
+			break;
 		
 	}
     stop();
