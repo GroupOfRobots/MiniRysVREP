@@ -40,7 +40,7 @@ void rysiu_zyj(int port, const std::string & col, const std::string & suffix) {
 		if(robot.connected()) {
 			//robot.moveToPoint(0.05);	
 			robot.layDown();
-			robot.moveToPoint(0.05);
+			robot.moveToPointFront(0.05);
 			extApi_sleepMs(5);
 		}
 	}
@@ -55,7 +55,7 @@ void rysiu_zyj2(int port, const std::string & col, const std::string & suffix) {
 		if(robot.connected()) {
 			//robot.moveToPoint(0.05);	
 			//robot.layDown();
-			robot.moveToPoint(0.05);
+			robot.moveToPointFront(0.05);
 			extApi_sleepMs(5);
 		}
 	}

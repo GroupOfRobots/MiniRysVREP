@@ -55,8 +55,8 @@ int main()
 		
 
 
-			rozowy.layDown();
-			rozowy.moveToPoint(0.05);
+			//rozowy.layDown();
+			rozowy.moveToPointAndStop(0.1);
 			//rozowy.layDown();
 			//rozowy.standUp();
 			//rozowy.layDown();

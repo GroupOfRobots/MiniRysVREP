@@ -94,7 +94,7 @@ bool rys::isTheObstacleAhead(float distance)
 	}
 	else if (state==0) 
 	{
-		if (orientation[1]<15*3.14/180 and orientation[1]>-15*3.14/180)
+		if (orientation[1]<10*3.14/180 and orientation[1]>-10*3.14/180)
 		{
 			if (linVel<0) 
 			{

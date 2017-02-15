@@ -33,7 +33,9 @@ class rys{
 		 * \param minDistance minimalna odległość od piłeczki, na którą ma dojechać robot
 		 */
 		 
+		void moveToPointFront(float minDistance);
 		void moveToPoint(float minDistance);
+		void moveToPointAndStop(float minDistance);
 		void layDown();
 		void standUp();
 		bool isTheObstacleAhead(float distance);
