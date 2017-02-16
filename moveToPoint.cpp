@@ -92,7 +92,10 @@ void rys::moveToPoint(float minDistance)
 		}
 		distance=sqrt(pow(ObjectPosition[0]-goalPosition[0],2)+pow(ObjectPosition[1]-goalPosition[1],2));
 		if (isTheObstacleAhead(0.15))
+		{
+			std::cout << "przeszkoda" << ObjectOrientation[1]*180/M_PI << std::endl;
 			break;
+		}
 		
 	}
     stop();
@@ -151,12 +154,12 @@ void rys::moveToPointAndStop(float minDistance)
 		distance=sqrt(pow(ObjectPosition[0]-goalPosition[0],2)+pow(ObjectPosition[1]-goalPosition[1],2));
 		if (isTheObstacleAhead(0.1))
 		{
-			std::cout << "przeszkoda" << std::endl;
 			break;
+			std::cout << "O hejka" << std::endl;
 		}
 		
 	}
-	moveAndRotate((-1)*state*LinVel,0);
-	extApi_sleepMs(3000);
+	moveAndRotate(pow((-1),state)*LinVel,0);
+	extApi_sleepMs(5000);
     stop();
 }
