@@ -93,7 +93,6 @@ void rys::moveToPoint(float minDistance)
 		distance=sqrt(pow(ObjectPosition[0]-goalPosition[0],2)+pow(ObjectPosition[1]-goalPosition[1],2));
 		if (isTheObstacleAhead(0.15))
 		{
-			std::cout << "przeszkoda" << ObjectOrientation[1]*180/M_PI << std::endl;
 			break;
 		}
 		
@@ -155,11 +154,31 @@ void rys::moveToPointAndStop(float minDistance)
 		if (isTheObstacleAhead(0.1))
 		{
 			break;
-			std::cout << "O hejka" << std::endl;
 		}
 		
 	}
 	moveAndRotate(pow((-1),state)*LinVel,0);
 	extApi_sleepMs(5000);
     stop();
+}
+
+void rys::moveToPointLying(float minDistance)
+{
+	setTarget();
+	float ObjectPosition[3];
+	float ObjectOrientation[3]; //rotation about Z --> ObjectOrientation[2]
+	float OrientationError;
+	float lMPosition[3];
+	float rMPosition[3];
+	simxGetObjectPosition(clientID,cuboidHandle,-1,ObjectPosition,simx_opmode_oneshot_wait);
+	simxGetObjectPosition(clientID,leftMotorHandle,-1, lMPosition, simx_opmode_oneshot_wait);
+	simxGetObjectPosition(clientID,rightMotorHandle,-1, rMPosition, simx_opmode_oneshot_wait);
+	OrientationError=orientationError2(ObjectPosition[0], ObjectPosition[1], lMPosition, rMPosition, goalPosition[0], goalPosition[1]);
+	if (OrientationError>-M_PI/2 && OrientationError<M_PI/2) //robot będzie jechał do piłeczki przodem, więc przewraca się na brzuszek
+		layDownFront();
+	else
+		layDownBack();
+	
+	moveToPoint(minDistance);
+	
 }

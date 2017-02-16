@@ -43,7 +43,7 @@ void rys::stop()
 	simxSetIntegerSignal(clientID,stopSignal.c_str(),1,simx_opmode_blocking);
 }
 
-void rys::layDown()
+void rys::layDownFront()
 {
 	simxSetIntegerSignal(clientID,positionSignal.c_str(),2,simx_opmode_blocking);
 	int state;
@@ -52,6 +52,22 @@ void rys::layDown()
 	{
 		simxGetIntegerSignal(clientID,positionSignal.c_str(),&state,simx_opmode_buffer);	
 	}
+}
+
+void rys::layDownBack()
+{
+	simxSetIntegerSignal(clientID,positionSignal.c_str(),4,simx_opmode_blocking);
+	int state;
+	simxGetIntegerSignal(clientID,positionSignal.c_str(),&state,simx_opmode_streaming);
+	while(state!=1)
+	{
+		simxGetIntegerSignal(clientID,positionSignal.c_str(),&state,simx_opmode_buffer);	
+	}
+}
+
+void rys::layDown()
+{
+	layDownFront();
 }
 
 void rys::standUp()
@@ -88,7 +104,6 @@ bool rys::isTheObstacleAhead(float distance)
 	simxGetObjectOrientation(clientID, cuboidHandle, -1, orientation, simx_opmode_streaming);
 	if (state==1)
 	{
-		std::cout << "no ok, leze " << sensorUpVal << std::endl;
 		if (sensorUpVal>0 and sensorUpVal<distance)
 			return true;
 	}

@@ -36,7 +36,10 @@ class rys{
 		void moveToPointFront(float minDistance);
 		void moveToPoint(float minDistance);
 		void moveToPointAndStop(float minDistance);
+		void moveToPointLying(float minDistance);
 		void layDown();
+		void layDownFront();
+		void layDownBack();
 		void standUp();
 		bool isTheObstacleAhead(float distance);
 
