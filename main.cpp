@@ -50,17 +50,17 @@ int main()
 		pomaranczowy.getData("RysLeftMotor6", "RysRightMotor6", "Rys6", "Goal6");*/
 			
 
-		if (rozowy.valid2())
+		if (rozowy.connected())
 		{  
-			simxUChar sensorTrigger=0;
 		
 
-			
-			//rozowy.moveToPoint(minDistance);
-			rozowy.layDown();
-			rozowy.standUp();
+
+			rozowy.moveToPointLying(0.1);
 			//rozowy.layDown();
-			//rozowy.moveAndRotate(-0.4,0);
+			//rozowy.standUp();
+			//rozowy.layDown();
+			//rozowy.moveAndRotate(0,0.1);
+			//rozowy.moveToPoint(0.1);
 
 
 			extApi_sleepMs(5);

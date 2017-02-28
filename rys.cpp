@@ -35,6 +35,7 @@ void rys::moveAndRotate(float linVel, float angVel)
 {
        simxSetFloatSignal(clientID,angVelSignal.c_str(),angVel,simx_opmode_oneshot);
        simxSetFloatSignal(clientID,linVelSignal.c_str(),linVel,simx_opmode_oneshot);
+       readSensors();
  }
 
 void rys::stop()
@@ -42,7 +43,7 @@ void rys::stop()
 	simxSetIntegerSignal(clientID,stopSignal.c_str(),1,simx_opmode_blocking);
 }
 
-void rys::layDown()
+void rys::layDownFront()
 {
 	simxSetIntegerSignal(clientID,positionSignal.c_str(),2,simx_opmode_blocking);
 	int state;
@@ -51,6 +52,22 @@ void rys::layDown()
 	{
 		simxGetIntegerSignal(clientID,positionSignal.c_str(),&state,simx_opmode_buffer);	
 	}
+}
+
+void rys::layDownBack()
+{
+	simxSetIntegerSignal(clientID,positionSignal.c_str(),4,simx_opmode_blocking);
+	int state;
+	simxGetIntegerSignal(clientID,positionSignal.c_str(),&state,simx_opmode_streaming);
+	while(state!=1)
+	{
+		simxGetIntegerSignal(clientID,positionSignal.c_str(),&state,simx_opmode_buffer);	
+	}
+}
+
+void rys::layDown()
+{
+	layDownFront();
 }
 
 void rys::standUp()
@@ -75,4 +92,34 @@ void rys::readSensors()
 	simxGetFloatSignal(clientID,sensorFrontSignal.c_str(), &sensorFrontVal,simx_opmode_streaming);
 	simxGetFloatSignal(clientID,sensorBackSignal.c_str(), &sensorBackVal,simx_opmode_streaming);
 	simxGetFloatSignal(clientID,sensorUpSignal.c_str(), &sensorUpVal,simx_opmode_streaming);
+}
+
+bool rys::isTheObstacleAhead(float distance)
+{
+	int state;
+	simxGetIntegerSignal(clientID,positionSignal.c_str(),&state,simx_opmode_streaming);
+	float linVel;
+	simxGetFloatSignal(clientID,linVelSignal.c_str(),&linVel,simx_opmode_streaming);
+	float orientation[3];
+	simxGetObjectOrientation(clientID, cuboidHandle, -1, orientation, simx_opmode_streaming);
+	if (state==1)
+	{
+		if (sensorUpVal>0 and sensorUpVal<distance)
+			return true;
+	}
+	else if (state==0) 
+	{
+		if (orientation[1]<3*3.14/180 and orientation[1]>-3*3.14/180)
+		{
+			if (linVel<0) 
+			{
+				if (sensorBackVal>0 and sensorBackVal<distance+0.05)
+					return true;
+			}
+			else
+				if (sensorFrontVal>0 and sensorFrontVal<distance+0.05)
+					return true;
+		}
+	}
+	return false;	
 }
